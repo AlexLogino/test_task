@@ -1,0 +1,13 @@
+
+services:
+  ui-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: selenide-ui-tests
+    environment:
+      - MAVEN_OPTS=-Xmx1g
+      - SELENIDE_HEADLESS=true
+      - SELENIDE_BROWSER=chrome
+    volumes:
+      - ./target/allure-results:/app/target/allure-results
