@@ -27,14 +27,24 @@ public class Router {
     @Step("open URL: {url}")
     public Router openUrl(String url) {
         log.info("opening URL: {}", url);
-        open(url);
-        return this;
+        try {
+            open(url);
+            return this;
+        } catch (Throwable e) {
+            log.error("FAILED: open URL {} \n", url, e);
+            throw e;
+        }
     }
 
     @Step("switch to default frame")
     public Router switchToDefaultFrame() {
         log.info("switch to default frame");
-        switchTo().defaultContent();
-        return this;
+        try {
+            switchTo().defaultContent();
+            return this;
+        } catch (Throwable e) {
+            log.error("FAILED: switch to default frame. \n", e);
+            throw e;
+        }
     }
 }

@@ -6,6 +6,7 @@ import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import system_io.utils.BrowserConfig;
+import system_io.utils.Logs;
 
 public abstract class BaseTest {
 
@@ -25,5 +26,7 @@ public abstract class BaseTest {
         if (WebDriverRunner.hasWebDriverStarted()) {
             WebDriverRunner.closeWebDriver();
         }
+
+        Logs.attachLogsOnFailure();
     }
 }

@@ -1,4 +1,3 @@
-
 services:
   ui-tests:
     build:
@@ -9,4 +8,4 @@ services:
       - MAVEN_OPTS=-Xmx1g
       - RUN_PROFILE=CI
     volumes:
-      - ./target/allure-results:/app/target/allure-results
+      - ./target:/app/target

@@ -1,50 +1,34 @@
-
-
-FROM eclipse-temurin:21-jdk
-
-ENV DEBIAN_FRONTEND=noninteractive
+FROM maven:3.9.9-eclipse-temurin-21
 
 RUN apt-get update && apt-get install -y \
-    wget \
-    gnupg \
-    ca-certificates \
-    unzip \
+    chromium \
+    chromium-driver \
     fonts-liberation \
-    libnss3 \
-    libxss1 \
     libasound2t64 \
     libatk-bridge2.0-0 \
-    libgtk-3-0 \
-    libgbm1 \
+    libatk1.0-0 \
+    libcups2 \
+    libdbus-1-3 \
     libdrm2 \
+    libgbm1 \
+    libgtk-3-0 \
+    libnspr4 \
+    libnss3 \
+    libx11-xcb1 \
     libxcomposite1 \
     libxdamage1 \
     libxrandr2 \
     xdg-utils \
     && rm -rf /var/lib/apt/lists/*
 
-RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub \
-    | gpg --dearmor -o /usr/share/keyrings/google-linux.gpg && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-linux.gpg] http://dl.google.com/linux/chrome/deb/ stable main" \
-    > /etc/apt/sources.list.d/google-chrome.list && \
-    apt-get update && \
-    apt-get install -y google-chrome-stable=120.* && \
-    rm -rf /var/lib/apt/lists/*
-
-ENV CHROME_VERSION=120.0.6099.109
-ENV ENV=ci
-
-RUN wget -q \
-    https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VERSION}/linux64/chromedriver-linux64.zip && \
-    unzip chromedriver-linux64.zip && \
-    mv chromedriver-linux64/chromedriver /usr/bin/chromedriver && \
-    chmod +x /usr/bin/chromedriver && \
-    rm -rf chromedriver-linux64.zip chromedriver-linux64
+ENV CHROME_BIN=/usr/bin/chromium
+ENV WEBDRIVER_CHROME_DRIVER=/usr/bin/chromedriver
 
 WORKDIR /app
 
-COPY . .
+COPY pom.xml .
+RUN mvn -B -q dependency:resolve
 
-RUN mvn -q -DskipTests dependency:go-offline
+COPY src ./src
 
-CMD ["mvn", "clean", "test"]
+CMD ["mvn", "test"]
