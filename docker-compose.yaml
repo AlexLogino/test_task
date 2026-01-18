@@ -7,7 +7,6 @@ services:
     container_name: selenide-ui-tests
     environment:
       - MAVEN_OPTS=-Xmx1g
-      - SELENIDE_HEADLESS=true
-      - SELENIDE_BROWSER=chrome
+      - RUN_PROFILE=CI
     volumes:
       - ./target/allure-results:/app/target/allure-results

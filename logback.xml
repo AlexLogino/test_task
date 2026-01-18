@@ -1,4 +1,5 @@
 <configuration>
+    <property name="ENV" value="${env:ENV:-local}"/>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -17,9 +18,21 @@
         </encoder>
     </appender>
 
-    <root level="INFO">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE"/>
-    </root>
+    <if condition='property("ENV").equals("local")'>
+        <then>
+            <root level="DEBUG">
+                <appender-ref ref="CONSOLE"/>
+            </root>
+        </then>
+    </if>
+
+    <if condition='property("ENV").equals("ci")'>
+        <then>
+            <root level="INFO">
+                <appender-ref ref="CONSOLE"/>
+                <appender-ref ref="FILE"/>
+            </root>
+        </then>
+    </if>
 
 </configuration>
